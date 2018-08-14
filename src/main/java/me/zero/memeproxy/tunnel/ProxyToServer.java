@@ -15,7 +15,7 @@
  * along with MemeProxy.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.zero.memeproxy.connection;
+package me.zero.memeproxy.tunnel;
 
 import me.zero.memeproxy.Connection;
 import me.zero.memeproxy.interfaces.ByteTransformer;
@@ -28,7 +28,7 @@ import java.nio.ByteBuffer;
  * @author Brady
  * @since 8/13/2018
  */
-public class ProxyToServer extends ProxyConnection {
+public class ProxyToServer extends ProxyTunnel {
 
     private static int threadNum = 0;
     private ByteTransformer decrypt;

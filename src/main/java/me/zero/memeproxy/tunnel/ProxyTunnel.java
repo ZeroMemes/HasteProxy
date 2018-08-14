@@ -15,7 +15,7 @@
  * along with MemeProxy.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.zero.memeproxy.connection;
+package me.zero.memeproxy.tunnel;
 
 import me.zero.memeproxy.Connection;
 import me.zero.memeproxy.interfaces.Interceptor;
@@ -24,14 +24,14 @@ import me.zero.memeproxy.interfaces.Interceptor;
  * @author Brady
  * @since 8/14/2018
  */
-class ProxyConnection extends Thread {
+class ProxyTunnel extends Thread {
 
     final int buffer;
 
     Interceptor interceptor;
     Connection connection;
 
-    ProxyConnection(String name, Connection connection, int buffer) {
+    ProxyTunnel(String name, Connection connection, int buffer) {
         super(name);
         this.connection = connection;
         this.buffer = buffer;

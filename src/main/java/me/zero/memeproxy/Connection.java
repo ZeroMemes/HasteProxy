@@ -17,8 +17,8 @@
 
 package me.zero.memeproxy;
 
-import me.zero.memeproxy.connection.ClientToProxy;
-import me.zero.memeproxy.connection.ProxyToServer;
+import me.zero.memeproxy.tunnel.ClientToProxy;
+import me.zero.memeproxy.tunnel.ProxyToServer;
 import me.zero.memeproxy.interfaces.ByteTransformer;
 import me.zero.memeproxy.interfaces.Interceptor;
 
