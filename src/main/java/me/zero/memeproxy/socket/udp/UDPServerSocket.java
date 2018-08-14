@@ -27,8 +27,7 @@ import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 /**
@@ -55,7 +54,8 @@ public class UDPServerSocket implements IServerSocket<UDPSocket> {
                 byte[] buffer = new byte[4096];
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                 this.listener.receive(packet);
-                ByteBuffer buf = ByteBuffer.wrap(packet.getData(), 0, packet.getLength());
+                buffer = Arrays.copyOfRange(buffer, 0, packet.getLength());
+                ByteBuffer buf = ByteBuffer.wrap(buffer);
 
                 if (packet.getSocketAddress().equals(dest)) {
                     ((UDPSocket) this.connection.getClient()).addToReceiveQueue(buf);
