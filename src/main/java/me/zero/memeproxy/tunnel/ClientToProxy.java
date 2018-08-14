@@ -41,36 +41,30 @@ public class ClientToProxy extends ProxyTunnel {
     public void run() {
         super.run();
         try {
-            while (true) {
-                byte[] buf = new byte[this.buffer];
-                int read = this.connection.getClient().getInputStream().read(buf);
-                if (read > 0) {
-
-                    ByteBuffer bytes = ByteBuffer.allocate(read);
-                    bytes.put(buf, 0, read);
+            while (!this.isInterrupted()) {
+                ByteBuffer buf = this.connection.getClient().receive(this.buffer);
+                if (buf != null) {
 
                     if (this.interceptor != null) {
-                        if (!this.interceptor.clientToServer(bytes, this.connection))
-                            return;
+                        if (!this.interceptor.clientToServer(buf, this.connection))
+                            continue;
 
                         ByteBuffer toSend;
                         while ((toSend = this.interceptor.getServerSendQueue().poll()) != null) {
-                            this.connection.getServer().getOutputStream().write(toSend.array());
-                            this.connection.getServer().getOutputStream().flush();
+                            this.connection.getServer().dispatch(toSend);
                         }
                     }
 
-                    if (encrypt != null) {
-                        bytes = encrypt.apply(bytes);
-                    }
+                    if (this.encrypt != null)
+                        buf = this.encrypt.apply(buf);
 
-                    this.connection.getServer().getOutputStream().write(bytes.array());
-                    this.connection.getServer().getOutputStream().flush();
+                    this.connection.getServer().dispatch(buf);
                 }
                 Utils.sleep();
             }
         } catch (IOException e) {
             System.out.println("Client connection closed");
+            e.printStackTrace();
         }
 
         try {

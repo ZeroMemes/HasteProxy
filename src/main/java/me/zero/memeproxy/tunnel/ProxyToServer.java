@@ -41,28 +41,24 @@ public class ProxyToServer extends ProxyTunnel {
     public void run() {
         super.run();
         try {
-            while (true) {
-                byte[] buf = new byte[this.buffer];
-                int read = this.connection.getServer().getInputStream().read(buf);
-                if (read > 0) {
+            while (!this.isInterrupted()) {
+                ByteBuffer buf = this.connection.getServer().receive(this.buffer);
+                if (buf != null) {
 
-                    ByteBuffer bytes = ByteBuffer.allocate(read);
-                    bytes.put(buf, 0, read);
+                    if (this.decrypt != null)
+                        buf = this.decrypt.apply(buf);
 
-                    if (decrypt != null)
-                        bytes = decrypt.apply(bytes);
+                    if (this.interceptor != null) {
+                        if (!this.interceptor.serverToClient(buf, this.connection))
+                            continue;
 
-                    if (!this.interceptor.serverToClient(bytes, this.connection))
-                        return;
-
-                    ByteBuffer toSend;
-                    while ((toSend = this.interceptor.getClientSendQueue().poll()) != null) {
-                        this.connection.getClient().getOutputStream().write(toSend.array());
-                        this.connection.getClient().getOutputStream().flush();
+                        ByteBuffer toSend;
+                        while ((toSend = this.interceptor.getClientSendQueue().poll()) != null) {
+                            this.connection.getClient().dispatch(toSend);
+                        }
                     }
 
-                    this.connection.getClient().getOutputStream().write(bytes.array());
-                    this.connection.getClient().getOutputStream().flush();
+                    this.connection.getClient().dispatch(buf);
                 }
                 Utils.sleep();
             }

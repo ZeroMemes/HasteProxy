@@ -17,12 +17,11 @@
 
 package me.zero.memeproxy;
 
+import me.zero.memeproxy.socket.ISocket;
 import me.zero.memeproxy.tunnel.ClientToProxy;
 import me.zero.memeproxy.tunnel.ProxyToServer;
 import me.zero.memeproxy.interfaces.ByteTransformer;
 import me.zero.memeproxy.interfaces.Interceptor;
-
-import java.net.Socket;
 
 /**
  * @author Brady
@@ -30,16 +29,32 @@ import java.net.Socket;
  */
 public final class Connection {
 
-    private final Socket client, server;
+    /**
+     * The socket established with the client
+     */
+    private final ISocket client;
+
+    /**
+     * The socket established with the server
+     */
+    private final ISocket server;
+
+    /**
+     * Tunnel between the client and the proxy
+     */
     private final ClientToProxy c2p;
+
+    /**
+     * Tunnel between the proxy and the server
+     */
     private final ProxyToServer p2s;
 
-    Connection(Socket client, Socket server) {
+    public Connection(ISocket client, ISocket server) {
         this.client = client;
         this.server = server;
 
-        c2p = new ClientToProxy(this, 4096);
-        p2s = new ProxyToServer(this, 4096);
+        this.c2p = new ClientToProxy(this, 4096);
+        this.p2s = new ProxyToServer(this, 4096);
     }
 
     final void setInterceptor(Interceptor interceptor) {
@@ -47,24 +62,21 @@ public final class Connection {
         this.p2s.setInterceptor(interceptor);
     }
 
-    final void start() {
+    public final void start() {
         this.c2p.start();
         this.p2s.start();
     }
 
-    public final void setEncrypt(ByteTransformer encrypt) {
+    public final void createEncyrption(ByteTransformer encrypt, ByteTransformer decrypt) {
         this.c2p.setEncrypt(encrypt);
-    }
-
-    public final void setDecrypt(ByteTransformer decrypt) {
         this.p2s.setDecrypt(decrypt);
     }
 
-    public final Socket getClient() {
+    public final ISocket getClient() {
         return this.client;
     }
 
-    public final Socket getServer() {
+    public final ISocket getServer() {
         return this.server;
     }
 }

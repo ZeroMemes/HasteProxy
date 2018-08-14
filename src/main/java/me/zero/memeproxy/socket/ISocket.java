@@ -15,32 +15,20 @@
  * along with MemeProxy.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    id 'java'
-}
+package me.zero.memeproxy.socket;
 
-group 'me.zero'
-version '1.0'
+import java.io.IOException;
+import java.nio.ByteBuffer;
 
-sourceCompatibility = 1.8
-compileJava {
-    sourceCompatibility = targetCompatibility = 1.8
-}
+/**
+ * @author Brady
+ * @since 8/14/2018
+ */
+public interface ISocket {
 
-repositories {
-    mavenCentral()
-}
+    ByteBuffer receive(int bufferSize) throws IOException;
 
-dependencies {
+    void dispatch(ByteBuffer buffer) throws IOException;
 
-}
-
-sourceSets {
-    minecraft_java {
-        compileClasspath += main.output
-    }
-
-    minecraft_bedrock {
-        compileClasspath += main.output
-    }
+    void close() throws IOException;
 }

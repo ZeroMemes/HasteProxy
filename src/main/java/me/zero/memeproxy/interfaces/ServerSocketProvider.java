@@ -15,32 +15,18 @@
  * along with MemeProxy.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    id 'java'
-}
+package me.zero.memeproxy.interfaces;
 
-group 'me.zero'
-version '1.0'
+import me.zero.memeproxy.socket.IServerSocket;
 
-sourceCompatibility = 1.8
-compileJava {
-    sourceCompatibility = targetCompatibility = 1.8
-}
+import java.io.IOException;
 
-repositories {
-    mavenCentral()
-}
+/**
+ * @author Brady
+ * @since 8/14/2018
+ */
+@FunctionalInterface
+public interface ServerSocketProvider {
 
-dependencies {
-
-}
-
-sourceSets {
-    minecraft_java {
-        compileClasspath += main.output
-    }
-
-    minecraft_bedrock {
-        compileClasspath += main.output
-    }
+    IServerSocket provide(String srcHost, int srcPort, String destHost, int destPort) throws IOException;
 }
