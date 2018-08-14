@@ -58,7 +58,7 @@ public class UDPServerSocket implements IServerSocket<UDPSocket> {
                 ByteBuffer buf = ByteBuffer.wrap(buffer);
 
                 if (packet.getSocketAddress().equals(dest)) {
-                    ((UDPSocket) this.connection.getClient()).addToReceiveQueue(buf);
+                    ((UDPSocket) this.connection.getServer()).addToReceiveQueue(buf);
                 } else {
                     if (this.connection == null) {
                         UDPSocket client = new UDPSocket(dispatch, packet.getSocketAddress());
@@ -68,7 +68,7 @@ public class UDPServerSocket implements IServerSocket<UDPSocket> {
                         this.connection.start();
                     }
 
-                    ((UDPSocket) this.connection.getServer()).addToReceiveQueue(buf);
+                    ((UDPSocket) this.connection.getClient()).addToReceiveQueue(buf);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
