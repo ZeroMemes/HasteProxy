@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+}
+
+group 'me.zero'
+version '1.0'
+
+sourceCompatibility = 1.8
+compileJava {
+    sourceCompatibility = targetCompatibility = 1.8
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+}
+
+sourceSets {
+    minecraft_java {
+        compileClasspath += main.output
+    }
+}
