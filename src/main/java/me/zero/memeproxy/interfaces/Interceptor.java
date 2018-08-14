@@ -15,7 +15,7 @@ public interface Interceptor {
 
     boolean serverToClient(ByteBuffer msg, Connection connection);
 
-    Queue<byte[]> getClientSendQueue();
+    Queue<ByteBuffer> getClientSendQueue();
 
-    Queue<byte[]> getServerSendQueue();
+    Queue<ByteBuffer> getServerSendQueue();
 }

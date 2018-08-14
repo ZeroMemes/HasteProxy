@@ -17,8 +17,8 @@ public class MinecraftJavaProxy {
     public static void main(String[] args) throws IOException {
         new MemeProxy(args[0], Integer.valueOf(args[1]), args[2], Integer.valueOf(args[3]), new Interceptor() {
 
-            private Queue<byte[]> clientSendQueue = new ArrayDeque<>();
-            private Queue<byte[]> serverSendQueue = new ArrayDeque<>();
+            private Queue<ByteBuffer> clientSendQueue = new ArrayDeque<>();
+            private Queue<ByteBuffer> serverSendQueue = new ArrayDeque<>();
 
             @Override
             public boolean clientToServer(ByteBuffer buffer, Connection connection) {
@@ -33,12 +33,12 @@ public class MinecraftJavaProxy {
             }
 
             @Override
-            public Queue<byte[]> getClientSendQueue() {
+            public Queue<ByteBuffer> getClientSendQueue() {
                 return this.clientSendQueue;
             }
 
             @Override
-            public Queue<byte[]> getServerSendQueue() {
+            public Queue<ByteBuffer> getServerSendQueue() {
                 return this.serverSendQueue;
             }
         }).start();

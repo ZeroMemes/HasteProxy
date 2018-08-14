@@ -36,9 +36,9 @@ public class ClientToProxy extends ProxyConnection {
                         if (!this.interceptor.clientToServer(bytes, this.connection))
                             return;
 
-                        byte[] toSend;
+                        ByteBuffer toSend;
                         while ((toSend = this.interceptor.getServerSendQueue().poll()) != null) {
-                            this.connection.getServer().getOutputStream().write(toSend);
+                            this.connection.getServer().getOutputStream().write(toSend.array());
                             this.connection.getServer().getOutputStream().flush();
                         }
                     }
