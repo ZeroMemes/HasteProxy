@@ -1,24 +1,24 @@
 /*
- * This file is part of MemeProxy.
+ * This file is part of HasteProxy.
  *
- * MemeProxy is free software: you can redistribute it and/or modify
+ * HasteProxy is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * MemeProxy is distributed in the hope that it will be useful,
+ * HasteProxy is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with MemeProxy.  If not, see <https://www.gnu.org/licenses/>.
+ * along with HasteProxy.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package me.zero.minecraft.java;
 
-import me.zero.memeproxy.MemeProxy;
-import me.zero.memeproxy.ProxyContext;
+import me.zero.hasteproxy.HasteProxy;
+import me.zero.hasteproxy.ProxyContext;
 
 /**
  * @author Brady
@@ -27,7 +27,7 @@ import me.zero.memeproxy.ProxyContext;
 public class MinecraftJavaProxy {
 
     public static void main(String[] args) throws InterruptedException {
-        new MemeProxy(
+        new HasteProxy(
                 args[0], Integer.valueOf(args[1]), // Bind Address
                 args[2], Integer.valueOf(args[3]), // Destination Address
                 InterceptorJavaEdition::new,

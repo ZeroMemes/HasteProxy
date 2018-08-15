@@ -1,20 +1,47 @@
 /*
- * This file is part of MemeProxy.
+ * This file is part of HasteProxy.
  *
- * MemeProxy is free software: you can redistribute it and/or modify
+ * HasteProxy is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * MemeProxy is distributed in the hope that it will be useful,
+ * HasteProxy is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with MemeProxy.  If not, see <https://www.gnu.org/licenses/>.
+ * along with HasteProxy.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 ext {
     moduleName = 'MinecraftJava'
+}
+
+buildscript {
+    repositories {
+        maven {
+            name = 'forge'
+            url = 'http://files.minecraftforge.net/maven'
+        }
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle.tweaker-client'
+
+minecraft {
+    version = '1.12.2'
+    mappings = 'snapshot_20180731'
+    runDir = 'run'
+    makeObfSourceJar = false
+
+    // What we put here doesn't matter because we're just using this as a
+    // way to access the decompiled and deobfuscated minecraft source code.
+    tweakClass = 'a'
 }
