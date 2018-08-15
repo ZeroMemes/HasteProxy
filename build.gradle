@@ -23,7 +23,10 @@ subprojects {
     }
 
     dependencies {
-        compile project(':HasteProxy')
+        // Everything but the core project should include the core project
+        if (project.name != 'HasteProxy') {
+            compile project(':HasteProxy')
+        }
     }
 
     sourceCompatibility = 1.8
