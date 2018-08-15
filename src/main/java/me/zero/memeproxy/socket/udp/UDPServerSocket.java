@@ -37,14 +37,12 @@ import java.util.function.Consumer;
 public class UDPServerSocket implements IServerSocket<UDPSocket> {
 
     private final DatagramSocket listener;
-    private final DatagramSocket dispatch;
     private final SocketAddress dest;
     private Connection connection;
 
     public UDPServerSocket(String srcHost, int srcPort, String destHost, int destPort) throws IOException {
         this.listener = new DatagramSocket(new InetSocketAddress(srcHost, srcPort));
         this.dest = new InetSocketAddress(destHost, destPort);
-        this.dispatch = new DatagramSocket();
     }
 
     @Override
@@ -61,8 +59,8 @@ public class UDPServerSocket implements IServerSocket<UDPSocket> {
                     ((UDPSocket) this.connection.getServer()).addToReceiveQueue(buf);
                 } else {
                     if (this.connection == null) {
-                        UDPSocket client = new UDPSocket(dispatch, packet.getSocketAddress());
-                        UDPSocket server = new UDPSocket(dispatch, dest);
+                        UDPSocket client = new UDPSocket(listener, packet.getSocketAddress());
+                        UDPSocket server = new UDPSocket(listener, dest);
                         this.connection = new Connection(client, server);
                         onConnection.accept(this.connection);
                         this.connection.start();
