@@ -15,11 +15,11 @@
  * along with MemeProxy.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-rootProject.name = 'MemeProxy-Root'
+ext {
+    moduleName = 'MemeProxy'
+}
 
-// Primary Project
-include 'MemeProxy'
-
-// Implementations
-include 'MinecraftJava'
-include 'MinecraftBedrock'
+dependencies {
+    compile 'io.netty:netty-all:4.1.28.Final'
+    compile fileTree(dir: '../libraries', includes: ['*.jar'])
+}

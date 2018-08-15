@@ -15,11 +15,6 @@
  * along with MemeProxy.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-rootProject.name = 'MemeProxy-Root'
-
-// Primary Project
-include 'MemeProxy'
-
-// Implementations
-include 'MinecraftJava'
-include 'MinecraftBedrock'
+ext {
+    moduleName = 'MinecraftJava'
+}

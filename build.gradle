@@ -15,38 +15,23 @@
  * along with MemeProxy.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-plugins {
-    id 'java'
+subprojects {
+    apply plugin: 'java'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        compile project(':MemeProxy')
+    }
+
+    sourceCompatibility = 1.8
+    compileJava {
+        sourceCompatibility = targetCompatibility = 1.8
+    }
 }
 
 group 'me.zero'
 version '1.0'
 
-sourceCompatibility = 1.8
-compileJava {
-    sourceCompatibility = targetCompatibility = 1.8
-}
-
-sourceSets {
-    minecraft_java {
-        compileClasspath += main.output
-    }
-
-    minecraft_bedrock {
-        compileClasspath += main.output
-    }
-}
-
-configurations {
-    minecraft_javaCompile.extendsFrom compile
-    minecraft_bedrockCompile.extendsFrom compile
-}
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    compile 'io.netty:netty-all:4.1.28.Final'
-    compile fileTree(dir: 'libraries', includes: ['*.jar'])
-}
