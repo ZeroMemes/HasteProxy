@@ -17,8 +17,11 @@
 
 package me.zero.hasteproxy;
 
+import io.netty.channel.Channel;
 import io.netty.channel.ServerChannel;
+import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
 import me.zero.hasteproxy.channel.initializer.TcpChannelInitializer;
 import me.zero.hasteproxy.channel.initializer.UdpChannelInitializer;
 import me.zero.hasteproxy.interfaces.ChannelInitializerProvider;
@@ -48,19 +51,23 @@ public class ProxyContext {
 
         TCP(
                 NioServerSocketChannel.class,
+                NioSocketChannel.class,
                 TcpChannelInitializer::new
         ),
 
         UDP(
                 UdpServerChannel.class,
+                NioDatagramChannel.class,
                 UdpChannelInitializer::new
         );
 
         public final Class<? extends ServerChannel> serverChannelClass;
+        public final Class<? extends Channel> channelClass;
         public final ChannelInitializerProvider provider;
 
-        Type(Class<? extends ServerChannel> serverChannelClass, ChannelInitializerProvider provider) {
+        Type(Class<? extends ServerChannel> serverChannelClass, Class<? extends Channel> channelClass, ChannelInitializerProvider provider) {
             this.serverChannelClass = serverChannelClass;
+            this.channelClass = channelClass;
             this.provider = provider;
         }
     }

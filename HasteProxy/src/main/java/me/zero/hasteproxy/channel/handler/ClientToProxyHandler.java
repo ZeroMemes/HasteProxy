@@ -45,7 +45,7 @@ public class ClientToProxyHandler extends Handler {
 
         Bootstrap b = new Bootstrap();
         b.group(inboundChannel.eventLoop())
-                .channel(inboundChannel.getClass())
+                .channel(this.proxy.type.channelClass)
                 .handler(new ProxyToServerHandler(this.proxy, inboundChannel, this.interceptor))
                 .option(ChannelOption.AUTO_READ, false);
 

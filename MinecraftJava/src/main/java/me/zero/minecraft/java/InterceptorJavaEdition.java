@@ -20,7 +20,6 @@ package me.zero.minecraft.java;
 import io.netty.buffer.ByteBuf;
 import me.zero.hasteproxy.Utils;
 import me.zero.hasteproxy.interfaces.Interceptor;
-import net.minecraft.network.PacketBuffer;
 
 import javax.xml.bind.DatatypeConverter;
 import java.util.ArrayDeque;
@@ -37,15 +36,13 @@ public final class InterceptorJavaEdition implements Interceptor {
 
     @Override
     public final boolean clientToServer(ByteBuf msg) {
-        PacketBuffer buffer = new PacketBuffer(msg);
-        System.out.println("client->server " + DatatypeConverter.printHexBinary(Utils.toByteArraySafe(buffer)));
+        System.out.println("client->server " + DatatypeConverter.printHexBinary(Utils.toByteArraySafe(msg)));
         return true;
     }
 
     @Override
     public final boolean serverToClient(ByteBuf msg) {
-        PacketBuffer buffer = new PacketBuffer(msg);
-        System.out.println("server->client " + DatatypeConverter.printHexBinary(Utils.toByteArraySafe(buffer)));
+        System.out.println("server->client " + DatatypeConverter.printHexBinary(Utils.toByteArraySafe(msg)));
         return true;
     }
 
