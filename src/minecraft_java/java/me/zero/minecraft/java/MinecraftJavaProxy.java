@@ -15,16 +15,23 @@
  * along with MemeProxy.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.zero.memeproxy.interfaces;
+package me.zero.minecraft.java;
 
-import java.nio.ByteBuffer;
+import me.zero.memeproxy.MemeProxy;
+import me.zero.memeproxy.ProxyContext;
 
 /**
  * @author Brady
  * @since 8/14/2018
  */
-@FunctionalInterface
-public interface ByteTransformer {
+public class MinecraftJavaProxy {
 
-    ByteBuffer apply(ByteBuffer in);
+    public static void main(String[] args) throws InterruptedException {
+        new MemeProxy(
+                args[0], Integer.valueOf(args[1]), // Bind Address
+                args[2], Integer.valueOf(args[3]), // Destination Address
+                InterceptorJavaEdition::new,
+                ProxyContext.Type.TCP
+        ).run();
+    }
 }

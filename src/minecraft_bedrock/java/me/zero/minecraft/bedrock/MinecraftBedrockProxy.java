@@ -15,12 +15,15 @@
  * along with MemeProxy.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import me.zero.memeproxy.Connection;
-import me.zero.memeproxy.interfaces.Interceptor;
+package me.zero.minecraft.bedrock;
+
+import io.netty.buffer.ByteBuf;
 import me.zero.memeproxy.MemeProxy;
+import me.zero.memeproxy.ProxyContext;
+import me.zero.memeproxy.Utils;
+import me.zero.memeproxy.interfaces.Interceptor;
 
 import javax.xml.bind.DatatypeConverter;
-import java.nio.ByteBuffer;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
@@ -28,36 +31,36 @@ import java.util.Queue;
  * @author Brady
  * @since 8/14/2018
  */
-public class MinecraftJavaProxy {
+public class MinecraftBedrockProxy {
 
-    public static void main(String[] args) {
-        new MemeProxy(args[0], Integer.valueOf(args[1]), args[2], Integer.valueOf(args[3]), new Interceptor() {
+    public static void main(String[] args) throws InterruptedException {
+        new MemeProxy(args[0], Integer.valueOf(args[1]), args[2], Integer.valueOf(args[3]), () -> new Interceptor() {
 
-            private Queue<ByteBuffer> clientSendQueue = new ArrayDeque<>();
-            private Queue<ByteBuffer> serverSendQueue = new ArrayDeque<>();
+            private Queue<ByteBuf> clientSendQueue = new ArrayDeque<>();
+            private Queue<ByteBuf> serverSendQueue = new ArrayDeque<>();
 
             @Override
-            public boolean clientToServer(ByteBuffer buffer, Connection connection) {
-                System.out.println("client->server " + DatatypeConverter.printHexBinary(buffer.array()));
+            public boolean clientToServer(ByteBuf msg) {
+                System.out.println("client->server " + DatatypeConverter.printHexBinary(Utils.toByteArraySafe(msg)));
                 return true;
             }
 
             @Override
-            public boolean serverToClient(ByteBuffer buffer, Connection connection) {
-                System.out.println("server->client " + DatatypeConverter.printHexBinary(buffer.array()));
+            public boolean serverToClient(ByteBuf msg) {
+                System.out.println("server->client " + DatatypeConverter.printHexBinary(Utils.toByteArraySafe(msg)));
                 return true;
             }
 
             @Override
-            public Queue<ByteBuffer> getClientSendQueue() {
+            public Queue<ByteBuf> getClientSendQueue() {
                 return this.clientSendQueue;
             }
 
             @Override
-            public Queue<ByteBuffer> getServerSendQueue() {
+            public Queue<ByteBuf> getServerSendQueue() {
                 return this.serverSendQueue;
             }
 
-        }, MemeProxy.ProxyType.TCP).start();
+        }, ProxyContext.Type.UDP).run();
     }
 }

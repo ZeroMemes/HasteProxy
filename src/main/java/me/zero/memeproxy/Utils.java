@@ -17,6 +17,8 @@
 
 package me.zero.memeproxy;
 
+import io.netty.buffer.ByteBuf;
+
 /**
  * @author Brady
  * @since 8/14/2018
@@ -25,11 +27,13 @@ public final class Utils {
 
     private Utils() {}
 
-    public static void sleep() {
-        try {
-            Thread.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    public static byte[] toByteArraySafe(ByteBuf buf) {
+        if (buf.hasArray()) {
+            return buf.array();
         }
+
+        byte[] bytes = new byte[buf.readableBytes()];
+        buf.getBytes(buf.readerIndex(), bytes);
+        return bytes;
     }
 }

@@ -27,14 +27,6 @@ compileJava {
     sourceCompatibility = targetCompatibility = 1.8
 }
 
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-
-}
-
 sourceSets {
     minecraft_java {
         compileClasspath += main.output
@@ -43,4 +35,18 @@ sourceSets {
     minecraft_bedrock {
         compileClasspath += main.output
     }
+}
+
+configurations {
+    minecraft_javaCompile.extendsFrom compile
+    minecraft_bedrockCompile.extendsFrom compile
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'io.netty:netty-all:4.1.28.Final'
+    compile fileTree(dir: 'libraries', includes: ['*.jar'])
 }

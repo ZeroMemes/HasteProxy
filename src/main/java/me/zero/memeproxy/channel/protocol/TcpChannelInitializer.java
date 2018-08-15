@@ -15,20 +15,27 @@
  * along with MemeProxy.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.zero.memeproxy.socket;
+package me.zero.memeproxy.channel.protocol;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.socket.SocketChannel;
+import me.zero.memeproxy.ProxyContext;
+import me.zero.memeproxy.channel.handler.ClientToProxyHandler;
 
 /**
  * @author Brady
  * @since 8/14/2018
  */
-public interface ISocket {
+public class TcpChannelInitializer extends ChannelInitializer<SocketChannel> {
 
-    ByteBuffer receive(int bufferSize) throws IOException;
+    private ProxyContext proxy;
 
-    void dispatch(ByteBuffer buffer) throws IOException;
+    public TcpChannelInitializer(ProxyContext proxy) {
+        this.proxy = proxy;
+    }
 
-    void close() throws IOException;
+    @Override
+    protected final void initChannel(SocketChannel ch) {
+        ch.pipeline().addLast(new ClientToProxyHandler(this.proxy));
+    }
 }

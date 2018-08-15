@@ -17,9 +17,8 @@
 
 package me.zero.memeproxy.interfaces;
 
-import me.zero.memeproxy.Connection;
+import io.netty.buffer.ByteBuf;
 
-import java.nio.ByteBuffer;
 import java.util.Queue;
 
 /**
@@ -28,11 +27,11 @@ import java.util.Queue;
  */
 public interface Interceptor {
 
-    boolean clientToServer(ByteBuffer msg, Connection connection);
+    boolean clientToServer(ByteBuf msg);
 
-    boolean serverToClient(ByteBuffer msg, Connection connection);
+    boolean serverToClient(ByteBuf msg);
 
-    Queue<ByteBuffer> getClientSendQueue();
+    Queue<ByteBuf> getClientSendQueue();
 
-    Queue<ByteBuffer> getServerSendQueue();
+    Queue<ByteBuf> getServerSendQueue();
 }

@@ -17,25 +17,25 @@
 
 package me.zero.memeproxy;
 
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
 import me.zero.memeproxy.interfaces.Interceptor;
-import me.zero.memeproxy.interfaces.ServerSocketProvider;
-import me.zero.memeproxy.socket.IServerSocket;
-import me.zero.memeproxy.socket.tcp.TCPServerSocket;
-import me.zero.memeproxy.socket.udp.UDPServerSocket;
 
-import java.io.IOException;
-import java.util.Objects;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.util.function.Supplier;
 
 /**
  * @author Brady
  * @since 8/13/2018
  */
-public final class MemeProxy extends Thread {
+public final class MemeProxy {
 
-    private static int threadNum = 0;
-
-    private final Interceptor interceptor;
-    private IServerSocket listener;
+    private final SocketAddress bindAddress;
+    private final ProxyContext context;
 
     /**
      * Creates a new Proxy server.
@@ -44,47 +44,29 @@ public final class MemeProxy extends Thread {
      * @param srcPort The local port to host on
      * @param destHost The destination host for clients
      * @param destPort The destination port for clients
-     * @param interceptor The packet interceptor being used
+     * @param interceptorProvider The packet interceptor being used
      * @param type The proxy protocol type
      */
-    public MemeProxy(String srcHost, int srcPort, String destHost, int destPort, Interceptor interceptor, ProxyType type) {
-        super("Proxy-Thread-" + ++threadNum);
+    public MemeProxy(String srcHost, int srcPort, String destHost, int destPort, Supplier<Interceptor> interceptorProvider, ProxyContext.Type type) {
         System.out.println("Creating " + type.toString() + " Proxy for " + destHost + ":" + destPort + " on " + srcHost + ":" + srcPort);
-        this.interceptor = interceptor;
-        this.listener = type.newServerSocket(srcHost, srcPort, destHost, destPort);
-        Objects.requireNonNull(this.listener);
+        this.bindAddress = new InetSocketAddress(srcHost, srcPort);
+        this.context = new ProxyContext(type, new InetSocketAddress(destHost, destPort), interceptorProvider);
     }
 
-    @Override
-    public void run() {
-        super.run();
-        this.listener.waitForConnection(connection ->
-                // I shouldn't have to cast this but for some reason it's making me do it
-                ((Connection) connection).setInterceptor(this.interceptor));
-    }
+    public void run() throws InterruptedException {
+        EventLoopGroup bossGroup = new NioEventLoopGroup();
+        EventLoopGroup workerGroup = new NioEventLoopGroup();
+        ChannelFuture f = new ServerBootstrap().group(bossGroup, workerGroup)
+                .channel(this.context.type.serverChannelClass)
+                .childHandler(this.context.type.provider.provide(this.context))
+                .childOption(ChannelOption.AUTO_READ, false)
+                .bind(this.bindAddress)
+                .sync();
 
-    public enum ProxyType {
-        TCP(TCPServerSocket::new),
-
-        /**
-         * Does not work ATM
-         */
-        UDP(UDPServerSocket::new);
-
-        private final ServerSocketProvider provider;
-
-        ProxyType(ServerSocketProvider provider) {
-            this.provider = provider;
-        }
-
-        public final IServerSocket<?> newServerSocket(String srcHost, int srcPort, String destHost, int destPort) {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
-                return provider.provide(srcHost, srcPort, destHost, destPort);
-            } catch (IOException e) {
-                System.out.println("Failed to create server socket");
-                e.printStackTrace();
-                return null;
-            }
-        }
+                f.channel().closeFuture().sync();
+            } catch (InterruptedException ignored) {}
+        }));
     }
 }

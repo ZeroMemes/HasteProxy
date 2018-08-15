@@ -15,17 +15,17 @@
  * along with MemeProxy.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.zero.memeproxy.socket;
+package me.zero.memeproxy.interfaces;
 
-import me.zero.memeproxy.Connection;
-
-import java.util.function.Consumer;
+import io.netty.channel.ChannelInitializer;
+import me.zero.memeproxy.ProxyContext;
 
 /**
  * @author Brady
  * @since 8/14/2018
  */
-public interface IServerSocket<T extends ISocket> {
+@FunctionalInterface
+public interface ChannelInitializerProvider {
 
-    void waitForConnection(Consumer<Connection> onConnection);
+    ChannelInitializer provide(ProxyContext context);
 }

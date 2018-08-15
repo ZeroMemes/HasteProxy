@@ -15,18 +15,27 @@
  * along with MemeProxy.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.zero.memeproxy.interfaces;
+package me.zero.memeproxy.channel.protocol;
 
-import me.zero.memeproxy.socket.IServerSocket;
-
-import java.io.IOException;
+import io.netty.channel.ChannelInitializer;
+import me.zero.memeproxy.ProxyContext;
+import me.zero.memeproxy.channel.handler.ClientToProxyHandler;
+import udpserversocketchannel.channel.UdpChannel;
 
 /**
  * @author Brady
  * @since 8/14/2018
  */
-@FunctionalInterface
-public interface ServerSocketProvider {
+public class UdpChannelInitializer extends ChannelInitializer<UdpChannel> {
 
-    IServerSocket provide(String srcHost, int srcPort, String destHost, int destPort) throws IOException;
+    private ProxyContext proxy;
+
+    public UdpChannelInitializer(ProxyContext proxy) {
+        this.proxy = proxy;
+    }
+
+    @Override
+    protected final void initChannel(UdpChannel ch) {
+        ch.pipeline().addLast(new ClientToProxyHandler(this.proxy));
+    }
 }
