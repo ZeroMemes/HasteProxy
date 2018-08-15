@@ -34,6 +34,9 @@ import java.util.Queue;
 public class MinecraftBedrockProxy {
 
     public static void main(String[] args) throws InterruptedException {
+        // Powershell command (in admin mode) to exempt from UDP loopback
+        //   CheckNetIsolation LoopbackExempt -a -n="Microsoft.MinecraftUWP_8wekyb3d8bbwe"
+
         new HasteProxy(args[0], Integer.valueOf(args[1]), args[2], Integer.valueOf(args[3]), () -> new Interceptor() {
 
             private Queue<ByteBuf> clientSendQueue = new ArrayDeque<>();
