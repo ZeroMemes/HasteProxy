@@ -19,8 +19,8 @@ package me.zero.hasteproxy;
 
 import io.netty.channel.ServerChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import me.zero.hasteproxy.channel.protocol.TcpChannelInitializer;
-import me.zero.hasteproxy.channel.protocol.UdpChannelInitializer;
+import me.zero.hasteproxy.channel.initializer.TcpChannelInitializer;
+import me.zero.hasteproxy.channel.initializer.UdpChannelInitializer;
 import me.zero.hasteproxy.interfaces.ChannelInitializerProvider;
 import me.zero.hasteproxy.interfaces.Interceptor;
 import udpserversocketchannel.channel.UdpServerChannel;
