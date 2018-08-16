@@ -295,9 +295,7 @@ internal fun ByteBuf.writeString(string: String): ByteBuf {
     if (bytes.size > 0x7FFF) {
         throw EncoderException("String too big (was " + bytes.size + " bytes encoded, max " + 0x7FFF + ")")
     } else {
-        this.writeVarInt(bytes.size)
-        this.writeBytes(bytes)
-        return this
+        return this.writeVarInt(bytes.size).writeBytes(bytes)
     }
 }
 
