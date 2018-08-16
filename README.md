@@ -1,2 +1,2 @@
 # HasteProxy
-A simple proxy server thing (poorly) written in Java!
+An experimental proxy server that runs on the JVM
