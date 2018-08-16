@@ -21,5 +21,5 @@ rootProject.name = 'HasteProxy-Root'
 include 'HasteProxy'
 
 // Implementations
-include 'MinecraftJava'
-include 'MinecraftBedrock'
+// include 'MinecraftJava'
+// include 'MinecraftBedrock'
