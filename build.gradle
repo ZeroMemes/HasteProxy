@@ -15,6 +15,18 @@
  * along with HasteProxy.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+buildscript {
+    ext.kotlin_version = '1.2.60'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'kotlin'
@@ -29,7 +41,7 @@ subprojects {
             compile project(':HasteProxy')
         }
 
-        compile 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+        compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     }
 
     compileKotlin {
