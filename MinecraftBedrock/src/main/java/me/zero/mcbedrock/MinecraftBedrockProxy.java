@@ -15,7 +15,7 @@
  * along with HasteProxy.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.zero.minecraft.bedrock;
+package me.zero.mcbedrock;
 
 import io.netty.buffer.ByteBuf;
 import me.zero.hasteproxy.HasteProxy;

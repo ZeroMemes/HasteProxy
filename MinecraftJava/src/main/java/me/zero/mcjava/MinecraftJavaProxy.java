@@ -15,7 +15,7 @@
  * along with HasteProxy.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.zero.minecraft.java;
+package me.zero.mcjava;
 
 import me.zero.hasteproxy.HasteProxy;
 import me.zero.hasteproxy.ProxyContext;
