@@ -1,6 +1,4 @@
-plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.2.60'
-}/*
+/*
  * This file is part of HasteProxy.
  *
  * HasteProxy is free software: you can redistribute it and/or modify
