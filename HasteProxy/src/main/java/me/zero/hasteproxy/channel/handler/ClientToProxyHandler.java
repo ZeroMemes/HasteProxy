@@ -36,7 +36,7 @@ public class ClientToProxyHandler extends Handler {
     private Channel outboundChannel;
 
     public ClientToProxyHandler(ProxyContext proxy) {
-        super(proxy, proxy.interceptorProvider.get());
+        super(proxy, proxy.createInterceptor());
     }
 
     @Override
@@ -45,11 +45,11 @@ public class ClientToProxyHandler extends Handler {
 
         Bootstrap b = new Bootstrap();
         b.group(inboundChannel.eventLoop())
-                .channel(this.proxy.type.channelClass)
+                .channel(this.proxy.getType().getChannelClass())
                 .handler(new ProxyToServerHandler(this.proxy, inboundChannel, this.interceptor))
                 .option(ChannelOption.AUTO_READ, false);
 
-        ChannelFuture f = b.connect(this.proxy.destination);
+        ChannelFuture f = b.connect(this.proxy.getDestination());
         this.outboundChannel = f.channel();
         f.addListener((ChannelFutureListener) future -> {
             if (future.isSuccess()) {

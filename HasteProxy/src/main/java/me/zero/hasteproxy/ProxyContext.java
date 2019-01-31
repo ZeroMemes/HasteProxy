@@ -34,14 +34,26 @@ import java.util.function.Supplier;
  */
 public class ProxyContext {
 
-    public final Type type;
-    public final SocketAddress destination;
-    public final Supplier<Interceptor> interceptorProvider;
+    private final Type type;
+    private final SocketAddress destination;
+    private final Supplier<Interceptor> interceptorProvider;
 
     ProxyContext(Type type, SocketAddress destination, Supplier<Interceptor> interceptorProvider) {
         this.type = type;
         this.destination = destination;
         this.interceptorProvider = interceptorProvider;
+    }
+
+    public final Type getType() {
+        return this.type;
+    }
+
+    public final SocketAddress getDestination() {
+        return this.destination;
+    }
+
+    public final Interceptor createInterceptor() {
+        return this.interceptorProvider.get();
     }
 
     public enum Type {
@@ -52,14 +64,26 @@ public class ProxyContext {
                 TcpChannelInitializer::new
         );
 
-        public final Class<? extends ServerChannel> serverChannelClass;
-        public final Class<? extends Channel> channelClass;
-        public final ChannelInitializerProvider provider;
+        private final Class<? extends ServerChannel> serverChannelClass;
+        private final Class<? extends Channel> channelClass;
+        private final ChannelInitializerProvider provider;
 
         Type(Class<? extends ServerChannel> serverChannelClass, Class<? extends Channel> channelClass, ChannelInitializerProvider provider) {
             this.serverChannelClass = serverChannelClass;
             this.channelClass = channelClass;
             this.provider = provider;
+        }
+
+        public final Class<? extends ServerChannel> getServerChannelClass() {
+            return this.serverChannelClass;
+        }
+
+        public final Class<? extends Channel> getChannelClass() {
+            return this.channelClass;
+        }
+
+        public final ChannelInitializerProvider getInitializerProvider() {
+            return this.provider;
         }
     }
 }

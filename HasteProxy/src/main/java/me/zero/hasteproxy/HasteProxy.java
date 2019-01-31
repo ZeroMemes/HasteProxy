@@ -57,8 +57,8 @@ public final class HasteProxy {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         ChannelFuture f = new ServerBootstrap().group(bossGroup, workerGroup)
-                .channel(this.context.type.serverChannelClass)
-                .childHandler(this.context.type.provider.provide(this.context))
+                .channel(this.context.getType().getServerChannelClass())
+                .childHandler(this.context.getType().getInitializerProvider().provide(this.context))
                 .childOption(ChannelOption.AUTO_READ, false)
                 .bind(this.bindAddress)
                 .sync();
