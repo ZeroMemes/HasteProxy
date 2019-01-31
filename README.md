@@ -8,4 +8,4 @@ An experimental proxy server that runs on the JVM
 
 This readme sucks, but this awesome google drawing diagram doesn't!
 
-![epic drawing](image/diagram.png)
+![epic drawing](image/diagram.svg)
